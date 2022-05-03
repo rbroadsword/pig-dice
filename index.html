@@ -17,35 +17,39 @@
       <h1>Pig Dice</h1>
     </div>
     <div class="newGame">
-      <button class="btn-succes">New Game</button>
+      <form id="new-game">
+        <label  for="player1">Player 1 name</label>
+        <input id="player1" type="text" required>
+        <label for="player2">Player 2 name</label>
+        <input id="player2" type="text" required>
+      <button type="submit" class="btn-succes">New Game</button>
+      </form>
     </div>
 
     <div class="mainGame">
       <div div class="row">
         <div class="col-md-6">
           <div class="player1">
-            <h2>Player 1: </h2>
-            <h2>score</h2>
-            <h2>current roll</h2>
+            <h2>Player 1: <span class="playerOneName"></span> </h2>
+            <h2>total score: <span class="p1-totalScore"></span></h2>
+            <h2>round score: <span class="p1-total"></span></h2>
           </div>
         </div>
 
         <div class="col-md-6">
           <div class="player2">
-            <h2>Player 2:</h2>
-            <h2>score</h2>
-            <h2>current roll</h2>
+            <h2>Player 2: <span class="playerTwoName"></span></h2>
+            <h2>total score: <span class="p2-totalScore"></span></h2>
+            <h2>round score: <span class="p2-total"></span></h2>
           </div>
         </div>
       </div>
 
       <div class="rollDice">
-        <h3>Roll: </h3>
+        <h3>Roll:  <span class="currentRoll"></span></h3>
         <button id="roll-dice" class="btn btn-primary btn-lg">Roll Dice</button>
         <button id="hold" class="btn btn-danger btn-lg">Hold</button>
       </div>
-
-
     </div>
   </div>
 </body>

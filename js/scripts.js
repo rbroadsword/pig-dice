@@ -1,67 +1,75 @@
 //Business Logic for Game
 
-function Game(dice, holdTurn, player1, player2) {
-  this.dice = dice;
+function Game(player1, player2) {
+  this.dice = 0;
   this.activeTurn = 0;
-  this.holdTurn = holdTurn;
-  this.player1 = 1;
-  this.player2 = 2;
-  this.currentPlayer = player1;
-}
-
-Game.prototype.turn = function (player) {
-  let check = player;
-  if (check === true) {
-    this.player1 = true;
-    this.player2 = false;
-    this.currentPlayer = true;
-    //this.player1Turn.roll();
-    console.log(this.currentPlayer);
-  }
-  else if (check === false) {
-    this.player1 = false;
-    this.player2 = true;
-    this.currentPlayer = false;
-    //this.player2Turn.roll();
-    console.log(this.currentPlayer);
-  }
-  //this.player1.roll();
-  console.log(this.currentPlayer);
+  this.player1 = player1;
+  this.player2 = player2;
+  this.currentPlayer = 1;
 }
 
 Game.prototype.roll = function () {
   const randomRoll = Math.floor(Math.random() * 6) + 1; // get a random number between 1 - 6
-  console.log(randomRoll);
   if (randomRoll === 1) { //check if number is === 1
-    this.activeTurn = 0; //change turn score to 0 
-    console.log(this.activeTurn);
-    this.turn(Player.activePlayer); //switch players
-    this.hold(this.currentPlayer);
+    this.dice = randomRoll; //show what dice roll is. 
+    this.activeTurn = 0; //change turn score to 0  
+    this.hold(); 
   } else if (randomRoll !== 1) {
+    this.dice = randomRoll; //show what dice roll is.
     this.activeTurn += randomRoll; //add roll to active turn total
-    this.turn(Player.activePlayer);
-    console.log(this.activeTurn);  //don't switch players
   }
 }
 
 //Business Logic for Players
-function Player(playerName, totalPoints, turnScore) {
+function Player(playerName) {
   this.playerName = playerName;
   this.totalPoints = 0;
   this.turnScore = 0;
   this.activePlayer;
 }
-Game.prototype.hold = function () {
-  if (this.currentPlayer === 1) {
-    this.totalPoints += this.activeTurn;
-    console.log(this.totalPoints);
-    this.currentPlayer = this.player2;
-    console.log(this.currentPlayer);
+
+Game.prototype.hold = function (player1, player2) {
+  console.log(this.player1, this.player2);
+  if (this.currentPlayer === 1){
+    this.player1.totalPoints += this.activeTurn; //add active turn points to total points
+    this.currentPlayer = 2; //switch current player
+    this.roll(); //player two roll
+    console.log(this.currentPlayer); 
   } else if (this.currentPlayer === 2) {
-    this.totalPoints += this.activeTurn;
-    console.log(this.totalPoints);
-    this.currentPlayer = this.player1;
-    console.log(this.currentPlayer);
+    this.player2.totalPoints += this.activeTurn; //add active turn points to total points
+    this.currentPlayer = 1; //switch current player
+    this.roll(); //player 1 roll
+    console.log(this.currentPlayer); 
   }
+
 }
+//UI
+
+$(document).ready(function() { 
+  $("#new-game").submit(function(event) {
+    event.preventDefault();  
+    $(".newGame").hide(); 
+    let player1 = new Player($("input#player1").val()); 
+    let player2 = new Player($("input#player2").val());
+    let newGame = new Game(player1, player2); 
+    console.log(newGame); 
+    $(".playerOneName").text(player1.playerName); 
+    $(".playerTwoName").text(player2.playerName); 
+    $("#roll-dice").click(function() {
+      newGame.roll();
+      if (newGame.activePlayer === 1) { 
+      $(".currentRoll").text(newGame.dice); 
+      $(".p1-total").text(newGame.activeTurn); 
+      } else if (newGame.activePlayer === 2) {
+        $(".currentRoll").text(newGame.dice); 
+        $(".p2-total").text(newGame.activeTurn);
+      }
+    })
+    $("#hold").click(function() {
+      newGame.hold(); 
+      $(".p1-totalScore").text(player1.totalPoints);
+      $(".p2-totalScore").text(player2.totalPoints);
+    })
+  })
+})
 
