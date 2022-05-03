@@ -57,13 +57,12 @@ $(document).ready(function() {
     $(".playerTwoName").text(player2.playerName); 
     $("#roll-dice").click(function() {
       newGame.roll();
-      if (newGame.activePlayer === 1) { 
-      $(".currentRoll").text(newGame.dice); 
-      $(".p1-total").text(newGame.activeTurn); 
-      } else if (newGame.activePlayer === 2) {
-        $(".currentRoll").text(newGame.dice); 
-        $(".p2-total").text(newGame.activeTurn);
-      }
+      $(".currentRoll").text(newGame.dice);
+      
+      $(".round-score").text(newGame.activeTurn); 
+      
+    
+      
     })
     $("#hold").click(function() {
       newGame.hold(); 
