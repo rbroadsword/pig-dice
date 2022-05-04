@@ -30,7 +30,9 @@ function Player(playerName) {
 
 Game.prototype.hold = function (player1, player2) {
   console.log(this.player1, this.player2);
-  if (this.currentPlayer === 1){
+  if (this.player2.playerName === "computer") {
+    this.computerPlay();
+  } else if (this.currentPlayer === 1) {
     this.player1.totalPoints += this.activeTurn; //add active turn points to total points
     this.currentPlayer = 2; //switch current player
     this.roll(); //player two roll
@@ -40,13 +42,27 @@ Game.prototype.hold = function (player1, player2) {
     this.currentPlayer = 1; //switch current player
     this.roll(); //player 1 roll
     console.log(this.currentPlayer); 
-  }
+  } 
+}
 
+Game.prototype.computerPlay = function() {
+for (let i=0; i<=2; i++) {
+  this.roll();
+  this.player2.totalPoints += this.activeTurn;
+}
 }
 //UI
 
 $(document).ready(function() { 
-  $("#new-game").submit(function(event) {
+  $("#2players").click(function() {
+    $ (".newGame1").show();
+    $ ("#pick-players").hide();
+  });
+  $("#computer").click(function() {
+    $("#pick-players").hide(); 
+    $(".newGame2").show();
+  });
+  $("#new-game1").submit(function(event) {
     event.preventDefault();  
     $(".newGame").hide(); 
     let player1 = new Player($("input#player1").val()); 
@@ -58,11 +74,28 @@ $(document).ready(function() {
     $("#roll-dice").click(function() {
       newGame.roll();
       $(".currentRoll").text(newGame.dice);
-      
-      $(".round-score").text(newGame.activeTurn); 
-      
-    
-      
+      $(".round-score").text(newGame.activeTurn);
+    })
+    $("#hold").click(function() {
+      newGame.hold(); 
+      $(".p1-totalScore").text(player1.totalPoints);
+      $(".p2-totalScore").text(player2.totalPoints);
+    })
+  })
+
+  $("#new-game2").submit(function(event) {
+    event.preventDefault();  
+    $(".newGame2").hide(); 
+    let player1 = new Player($("input#player1c").val()); 
+    let player2 = new Player("computer");
+    let newGame = new Game(player1, player2); 
+    console.log(newGame); 
+    $(".playerOneName").text(player1.playerName); 
+    $(".playerTwoName").text("Computer"); 
+    $("#roll-dice").click(function() {
+      newGame.roll();
+      $(".currentRoll").text(newGame.dice);
+      $(".round-score").text(newGame.activeTurn);
     })
     $("#hold").click(function() {
       newGame.hold(); 
